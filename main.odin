@@ -43,7 +43,7 @@ block_create :: proc(prev_block: ^Block, txs: int) -> (Block, Block_Creation_Err
 		transactions = txs,
 		prev_hash    = prev_block.hash,
 	}
-	block_calculate_hash(&block)
+	block.hash = block_calculate_hash(&block)
 
 	return block, nil
 }
