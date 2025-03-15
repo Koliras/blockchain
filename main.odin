@@ -56,6 +56,26 @@ block_is_valid :: proc(new_block, prev_block: ^Block) -> bool {
 	)
 }
 
+Blockchain :: [dynamic]Block
+blockchain: Blockchain
+
+replace_chain :: proc(new_chain: ^Blockchain) {
+	if len(blockchain) < len(new_chain) {
+		blockchain_free(&blockchain)
+		blockchain = new_chain^
+	}
+}
+
+// TODO: when transactions field on blocks will be filled with real transactions and not just int,
+// should implement freeing memory for them too
+blockchain_free :: proc(chain: ^Blockchain) {
+	for &block in chain {
+		// no need to delete prev_hash since it will be deleted in previous block when deleting hash
+		delete(block.hash)
+	}
+	free(chain)
+}
+
 main :: proc() {
 	block := Block{1, 66666666, 2, "hash", "prevhash"}
 	block.hash = block_calculate_hash(&block)
