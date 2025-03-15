@@ -48,6 +48,14 @@ block_create :: proc(prev_block: ^Block, txs: int) -> (Block, Block_Creation_Err
 	return block, nil
 }
 
+block_is_valid :: proc(new_block, prev_block: ^Block) -> bool {
+	return(
+		new_block.index - 1 == prev_block.index &&
+		new_block.prev_hash == prev_block.hash &&
+		block_calculate_hash(new_block) == new_block.hash \
+	)
+}
+
 main :: proc() {
 	block := Block{1, 66666666, 2, "hash", "prevhash"}
 	block.hash = block_calculate_hash(&block)
